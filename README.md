@@ -25,11 +25,20 @@ Activate the dev environment:
 Run the following commands if your changes affect the structure of the stored
 data.
 
-    python3 manage.py makemigrations
-    python3 manage.py migrate
+    python manage.py makemigrations --dry-run
+    python manage.py makemigrations
+    python manage.py migrate
 
 Start the app locally:
 
     python manage.py runserver
 
 Go to the local site `http://localhost:8000/assetlogger/` in a web browser.
+
+### Using the admin site
+
+If an admin user has not been created, run:
+
+    python manage.py createsuperuser
+    
+Then, access the admin site at `http://localhost:8000/admin/`.
