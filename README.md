@@ -33,7 +33,7 @@ Start the app locally:
 
     python manage.py runserver
 
-Go to the local site `http://localhost:8000/assetlogger/` in a web browser.
+Go to the local site <http://localhost:8000/assetlogger/> in a web browser.
 
 ### Using the admin site
 
@@ -41,4 +41,5 @@ If an admin user has not been created, run:
 
     python manage.py createsuperuser
     
-Then, access the admin site at `http://localhost:8000/admin/`.
+Then run `python manage.py runserver` and access the admin site at
+<http://localhost:8000/admin/>.
