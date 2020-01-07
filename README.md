@@ -20,7 +20,7 @@ Run setup script.
 
 Activate the dev environment:
 
-    source ~/.venv/assetlogger/bin/activate
+    source ~/_venv/assetlogger/bin/activate
 
 Run the following commands if your changes affect the structure of the stored
 data.
