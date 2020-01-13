@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>History</h1>
+{% if assetdate_list %}
+<ul>
+  {% for assetdate in assetdate_list %}
+  <li>
+    {{ assetdate.date }}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There is no history.</p>
+{% endif %}
+{% endblock %}
