@@ -1,7 +1,7 @@
 from django.views import generic
 from django.http import HttpResponse
 
-from assetlogger.models import AssetDate
+from assetlogger.models import AssetDate, AssetInstance
 
 
 def index(request):
@@ -10,3 +10,16 @@ def index(request):
 
 class AssetDateListView(generic.ListView):
     model = AssetDate
+
+    def get_context_data(self, **kwargs):
+        """ Return custom context with [date, value] list. """
+        context = super().get_context_data(**kwargs)
+        asset_dates = context['assetdate_list']
+        date_strs = [ad.date.isoformat() for ad in asset_dates]
+
+        # Get asset instances matching dates and get total values
+        assets = [
+            AssetInstance.objects.filter(date=ad) for ad in asset_dates]
+        values = map(lambda x: sum([a.value for a in x]), assets)
+
+        return {'value_history': zip(date_strs, values)}

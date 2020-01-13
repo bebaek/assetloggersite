@@ -2,11 +2,11 @@
 
 {% block content %}
 <h1>History</h1>
-{% if assetdate_list %}
+{% if value_history %}
 <ul>
-  {% for assetdate in assetdate_list %}
+  {% for date, value in value_history %}
   <li>
-    {{ assetdate.date }}
+    {{ date }}: {{ value }}
   </li>
   {% endfor %}
 </ul>
