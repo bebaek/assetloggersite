@@ -21,4 +21,5 @@ urlpatterns = [
     path('assetlogger/', include('assetlogger.urls')),
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='assetlogger/', permanent=True)),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

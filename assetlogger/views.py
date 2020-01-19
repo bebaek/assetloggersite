@@ -1,11 +1,23 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from django.views import generic
-from django.http import HttpResponse
 
 from assetlogger.models import AssetDate, AssetInstance
 
 
+@login_required
 def index(request):
-    return HttpResponse('Hello, world')
+    asset_dates = AssetDate.objects.all()
+    date_strs = [ad.date.isoformat() for ad in asset_dates]
+
+    # Get asset instances matching dates and get total values
+    assets = [
+        AssetInstance.objects.filter(date=ad) for ad in asset_dates]
+    values = map(lambda x: sum([a.value for a in x]), assets)
+
+    context = {'value_history': zip(date_strs, values)}
+
+    return render(request, 'index.html', context=context)
 
 
 class AssetDateListView(generic.ListView):
