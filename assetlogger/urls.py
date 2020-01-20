@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('asset_history/', views.AssetDateListView.as_view(),
-         name='asset_history'),
+    path('create_asset_instance/', views.create_asset_instance,
+         name='create_asset_instance'),
 ]
