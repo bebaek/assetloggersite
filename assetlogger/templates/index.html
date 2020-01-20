@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+    <li>User: {{ user.get_username }}</li>
+    <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+  {% else %}
+    <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+  {% endif %}
+
+  <h1>History</h1>
+  <p><a href="{% url 'create_asset_instance' %}">Create asset instance</a></p>
+  {% if value_history %}
+    <ul>
+      {% for date, value in value_history %}
+      <li>
+        {{ date }}: {{ value }}
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There is no history.</p>
+  {% endif %}
+
+{% endblock %}
