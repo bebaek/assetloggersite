@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Asset list</h1>
+  {% if asset_list %}
+    <ul>
+      <table>
+        {% for asset in asset_list %}
+          <tr>
+            <td>{{ asset.asset_name }}</td>
+            <td><a href="{{ asset.ext_url }}">{{ asset.ext_url }}</a></td>
+          </tr>
+        {% endfor %}
+      </table>
+    </ul>
+  {% else %}
+    <p>There is no asset.</p>
+  {% endif %}
+{% endblock %}

@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.views import generic
 
 from assetlogger.forms import (
     CreateAssetForm, CreateAssetDateForm, CreateAssetInstanceForm
@@ -22,6 +24,10 @@ def index(request):
     context = {'value_history': zip(date_strs, values)}
 
     return render(request, 'index.html', context=context)
+
+
+class AssetListView(LoginRequiredMixin, generic.ListView):
+    model = Asset
 
 
 @login_required
