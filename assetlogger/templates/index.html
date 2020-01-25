@@ -11,9 +11,9 @@
 
   <h1>History</h1>
   <p><a href="{% url 'assets' %}">Assets</a></p>
-  <p><a href="{% url 'create_asset' %}">Create asset</a></p>
-  <p><a href="{% url 'create_asset_date' %}">Create asset date</a></p>
-  <p><a href="{% url 'create_asset_instance' %}">Create asset instance</a></p>
+  <p><a href="{% url 'create-asset' %}">Create asset</a></p>
+  <p><a href="{% url 'create-asset-date' %}">Create asset date</a></p>
+  <p><a href="{% url 'create-asset-instance' %}">Create asset instance</a></p>
   {% if value_history %}
     <ul>
       {% for date, value in value_history %}
