@@ -8,3 +8,7 @@ class CreateAssetInstanceForm(forms.Form):
     date = forms.ModelChoiceField(queryset=AssetDate.objects.all())
     unit = forms.CharField()
     value = forms.DecimalField(decimal_places=2, max_digits=20)
+
+
+class CreateAssetDateForm(forms.Form):
+    date = forms.DateField()

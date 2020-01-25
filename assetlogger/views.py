@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from assetlogger.forms import CreateAssetInstanceForm
+from assetlogger.forms import CreateAssetDateForm, CreateAssetInstanceForm
 from assetlogger.models import Asset, AssetDate, AssetInstance
 
 
@@ -53,3 +53,32 @@ def create_asset_instance(request):
         'form': form,
     }
     return render(request, 'assetlogger/create_asset_instance.html', context)
+
+
+@login_required
+def create_asset_date(request):
+    # POST: process the form data
+    if request.method == 'POST':
+        form = CreateAssetDateForm(request.POST)
+
+        if form.is_valid():
+            asset_date = AssetDate(
+                date=form.cleaned_data['date'],
+            )
+            asset_date.save()
+
+            # FIXME: Redirect to date view instead
+            return HttpResponseRedirect(reverse('index'))
+
+    # GET: create the default form
+    else:
+        default_date = AssetDate().date  # Initial date defined in model
+        form = CreateAssetDateForm(
+            initial={
+                'date': default_date,
+            })
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'assetlogger/create_asset_date.html', context)
