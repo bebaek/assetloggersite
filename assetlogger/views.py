@@ -3,7 +3,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from assetlogger.forms import CreateAssetDateForm, CreateAssetInstanceForm
+from assetlogger.forms import (
+    CreateAssetForm, CreateAssetDateForm, CreateAssetInstanceForm
+)
 from assetlogger.models import Asset, AssetDate, AssetInstance
 
 
@@ -23,6 +25,30 @@ def index(request):
 
 
 @login_required
+def create_asset(request):
+    # POST: process the form data
+    if request.method == 'POST':
+        form = CreateAssetForm(request.POST)
+
+        if form.is_valid():
+            asset = Asset(
+                asset_name=form.cleaned_data['asset_name'],
+                ext_url=form.cleaned_data['ext_url'],
+            )
+            asset.save()
+            return HttpResponseRedirect(reverse('index'))
+
+    # GET: create the default form
+    else:
+        form = CreateAssetForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'assetlogger/create_asset.html', context)
+
+
+@login_required
 def create_asset_instance(request):
     # POST: process the form data
     if request.method == 'POST':
@@ -36,8 +62,6 @@ def create_asset_instance(request):
                 value=form.cleaned_data['value'],
             )
             asset_instance.save()
-
-            # FIXME: Redirect to date view instead
             return HttpResponseRedirect(reverse('index'))
 
     # GET: create the default form
@@ -66,8 +90,6 @@ def create_asset_date(request):
                 date=form.cleaned_data['date'],
             )
             asset_date.save()
-
-            # FIXME: Redirect to date view instead
             return HttpResponseRedirect(reverse('index'))
 
     # GET: create the default form
