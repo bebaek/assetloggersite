@@ -1,5 +1,7 @@
 {% extends "base_generic.html" %}
 
+{% load humanize %}
+
 {% block content %}
   <h3>{{ object.date }}</h3>
 
@@ -7,7 +9,7 @@
     {% for name, value in asset_instance_details %}
     <tr>
       <td>{{ name }}</td>
-      <td>{{ value }}</td>
+      <td>{{ value|intcomma }}</td>
     </tr>
     {% endfor %}
   </table>
