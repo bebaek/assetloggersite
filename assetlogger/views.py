@@ -84,7 +84,9 @@ def create_asset(request):
 
 
 @login_required
-def create_asset_instance(request):
+def create_asset_instance(request, pk_date):
+    asset_date = AssetDate(pk=pk_date)
+
     # POST: process the form data
     if request.method == 'POST':
         form = CreateAssetInstanceForm(request.POST)
@@ -92,7 +94,7 @@ def create_asset_instance(request):
         if form.is_valid():
             asset_instance = AssetInstance(
                 asset=form.cleaned_data['asset'],
-                date=form.cleaned_data['date'],
+                date=asset_date,
                 unit=form.cleaned_data['unit'],
                 value=form.cleaned_data['value'],
             )
@@ -104,7 +106,7 @@ def create_asset_instance(request):
         form = CreateAssetInstanceForm(
             initial={
                 'asset': Asset.objects.get(pk=1),
-                'date': Asset.objects.get(pk=1),
+                'date': asset_date,
                 'unit': 'USD',
             })
 

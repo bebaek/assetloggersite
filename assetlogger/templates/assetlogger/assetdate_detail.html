@@ -11,5 +11,5 @@
     </tr>
     {% endfor %}
   </table>
-  <p><a href="{% url 'create-asset-instance' %}">Create asset instance</a></p>
+  <p><a href="{% url 'create-asset-instance' object.pk %}">Create asset instance</a></p>
 {% endblock %}
