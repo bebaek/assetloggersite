@@ -2,15 +2,16 @@
 
 {% block content %}
 
-  <h1>History</h1>
+  <h3>Total value history</h3>
   {% if value_history %}
-    <ul>
+    <table class="table table-sm table-striped">
       {% for date, value in value_history %}
-      <li>
-        {{ date }}: {{ value }}
-      </li>
+      <tr>
+        <td>{{ date }}</td>
+        <td>{{ value }}</td>
+      </tr>
       {% endfor %}
-    </ul>
+    </table>
   {% else %}
     <p>There is no history.</p>
   {% endif %}
