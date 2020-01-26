@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h3>{{ object.date }}</h3>
+
+  <table class="table table-sm table-striped">
+    {% for name, value in asset_instance_details %}
+    <tr>
+      <td>{{ name }}</td>
+      <td>{{ value }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p><a href="{% url 'create-asset-instance' %}">Create asset instance</a></p>
+{% endblock %}

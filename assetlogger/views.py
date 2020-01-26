@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
+from django.db.models import Sum
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
@@ -14,15 +15,16 @@ from assetlogger.models import Asset, AssetDate, AssetInstance
 @login_required
 def index(request):
     asset_dates = AssetDate.objects.all()
-    date_strs = [ad.date.isoformat() for ad in asset_dates]
 
-    # Get asset instances matching dates and get total values
-    assets = [
-        AssetInstance.objects.filter(date=ad) for ad in asset_dates]
-    values = map(lambda x: sum([a.value for a in x]), assets)
+    value_history = []
+    for ad in asset_dates:
+        # Get asset instances matching dates and get total values
+        value = AssetInstance.objects.filter(date=ad).aggregate(Sum('value'))
 
-    context = {'value_history': zip(date_strs, values)}
+        # Build a list of (pk, date, value) for context
+        value_history += [(ad.pk, ad.date.isoformat(), value['value__sum'])]
 
+    context = {'value_history': value_history}
     return render(request, 'index.html', context=context)
 
 
@@ -38,6 +40,23 @@ class AssetUpdate(LoginRequiredMixin, generic.edit.UpdateView):
 class AssetDelete(LoginRequiredMixin, generic.edit.DeleteView):
     model = Asset
     success_url = reverse_lazy('assets')
+
+
+class AssetDateDetail(LoginRequiredMixin, generic.DetailView):
+    model = AssetDate
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        asset_instance_list = AssetInstance.objects.filter(
+            date=context['object'])
+
+        names = []
+        values = []
+        for ai in asset_instance_list:
+            names += [ai.asset.asset_name]
+            values += [ai.value]
+        context['asset_instance_details'] = zip(names, values)
+        return context
 
 
 @login_required

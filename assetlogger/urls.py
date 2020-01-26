@@ -12,6 +12,8 @@ urlpatterns = [
          name='delete-asset'),
     path('asset-instance/create/', views.create_asset_instance,
          name='create-asset-instance'),
-    path('asset_date/create/', views.create_asset_date,
+    path('asset-date/create/', views.create_asset_date,
          name='create-asset-date'),
+    path('asset-date/<int:pk>', views.AssetDateDetail.as_view(),
+         name='asset-date-detail'),
 ]

@@ -1,14 +1,15 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+  {% load humanize %}
 
   <h3>Total value history</h3>
   {% if value_history %}
     <table class="table table-sm table-striped">
-      {% for date, value in value_history %}
+      {% for pk, date, value in value_history %}
       <tr>
-        <td>{{ date }}</td>
-        <td>{{ value }}</td>
+        <td><a href="{% url 'asset-date-detail' pk %}">{{ date }}</a></td>
+        <td>{{ value|intcomma }}</td>
       </tr>
       {% endfor %}
     </table>
@@ -16,5 +17,4 @@
   {% else %}
     <p>There is no history.</p>
   {% endif %}
-
 {% endblock %}
