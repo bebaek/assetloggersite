@@ -24,7 +24,7 @@ def index(request):
         # Build a list of (pk, date, value) for context
         value_history += [(ad.pk, ad.date.isoformat(), value['value__sum'])]
 
-    context = {'value_history': value_history}
+    context = {'value_history': sorted(value_history, key=lambda x: x[1])}
     return render(request, 'index.html', context=context)
 
 
