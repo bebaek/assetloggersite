@@ -12,6 +12,7 @@
       </tr>
       {% endfor %}
     </table>
+    <a href="{% url 'create-asset-date' %}">Create another date</a>
   {% else %}
     <p>There is no history.</p>
   {% endif %}
