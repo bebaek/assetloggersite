@@ -8,7 +8,7 @@
         {% for asset in asset_list %}
           <tr>
             <td>{{ asset.asset_name }}</td>
-            <td><a href="{{ asset.ext_url }}">{{ asset.ext_url }}</a></td>
+            <td><a href="{{ asset.ext_url }}" target="_blank">{{ asset.ext_url }}</a></td>
             <td><a href="{% url 'update-asset' asset.pk %}">Edit</a></td>
             <td><a href="{% url 'delete-asset' asset.pk %}">Delete</a></td>
           </tr>
