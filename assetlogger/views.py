@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 from assetlogger.forms import (
@@ -33,6 +33,11 @@ class AssetListView(LoginRequiredMixin, generic.ListView):
 class AssetUpdate(LoginRequiredMixin, generic.edit.UpdateView):
     model = Asset
     fields = '__all__'
+
+
+class AssetDelete(LoginRequiredMixin, generic.edit.DeleteView):
+    model = Asset
+    success_url = reverse_lazy('assets')
 
 
 @login_required

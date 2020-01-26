@@ -8,6 +8,8 @@ urlpatterns = [
     path('asset/create/', views.create_asset, name='create-asset'),
     path('asset/<int:pk>/update/', views.AssetUpdate.as_view(),
          name='update-asset'),
+    path('asset/<int:pk>/delete/', views.AssetDelete.as_view(),
+         name='delete-asset'),
     path('asset-instance/create/', views.create_asset_instance,
          name='create-asset-instance'),
     path('asset_date/create/', views.create_asset_date,
