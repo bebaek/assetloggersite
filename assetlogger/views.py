@@ -30,6 +30,11 @@ class AssetListView(LoginRequiredMixin, generic.ListView):
     model = Asset
 
 
+class AssetUpdate(LoginRequiredMixin, generic.edit.UpdateView):
+    model = Asset
+    fields = '__all__'
+
+
 @login_required
 def create_asset(request):
     # POST: process the form data
