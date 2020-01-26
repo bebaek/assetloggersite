@@ -4,7 +4,7 @@
   <h1>Asset list</h1>
   {% if asset_list %}
     <ul>
-      <table>
+      <table class="table table-sm table-striped">
         {% for asset in asset_list %}
           <tr>
             <td>{{ asset.asset_name }}</td>
@@ -14,6 +14,7 @@
           </tr>
         {% endfor %}
       </table>
+      <p><a href="{% url 'create-asset' %}">Create asset</a></p>
     </ul>
   {% else %}
     <p>There is no asset.</p>
