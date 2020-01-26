@@ -3,19 +3,17 @@
 {% block content %}
   <h1>Asset list</h1>
   {% if asset_list %}
-    <ul>
-      <table class="table table-sm table-striped">
-        {% for asset in asset_list %}
-          <tr>
-            <td>{{ asset.asset_name }}</td>
-            <td><a href="{{ asset.ext_url }}" target="_blank">{{ asset.ext_url }}</a></td>
-            <td><a href="{% url 'update-asset' asset.pk %}">Edit</a></td>
-            <td><a href="{% url 'delete-asset' asset.pk %}">Delete</a></td>
-          </tr>
-        {% endfor %}
-      </table>
-      <p><a href="{% url 'create-asset' %}">Create asset</a></p>
-    </ul>
+    <table class="table table-sm table-striped">
+      {% for asset in asset_list %}
+        <tr>
+          <td>{{ asset.asset_name }}</td>
+          <td><a href="{{ asset.ext_url }}" target="_blank">{{ asset.ext_url }}</a></td>
+          <td><a href="{% url 'update-asset' asset.pk %}">Edit</a></td>
+          <td><a href="{% url 'delete-asset' asset.pk %}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+    <p><a href="{% url 'create-asset' %}">Create asset</a></p>
   {% else %}
     <p>There is no asset.</p>
   {% endif %}
