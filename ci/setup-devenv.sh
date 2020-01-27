@@ -6,7 +6,7 @@ echo Start: set up Python environment.
 devenv=assetlogger
 
 # Packages for development
-pkgs=(django flake8 ipython)
+pkgs=(django django-crispy-forms flake8 ipython)
 
 # Create virtual environment. python3-venv is required.
 # Use _venv/. Spacemacs cannot even handle the presence of .venv/.
