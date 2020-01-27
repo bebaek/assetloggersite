@@ -30,6 +30,7 @@ def index(request):
 
 class AssetListView(LoginRequiredMixin, generic.ListView):
     model = Asset
+    ordering = ['asset_name']
 
 
 class AssetUpdate(LoginRequiredMixin, generic.edit.UpdateView):
@@ -64,14 +65,13 @@ class AssetDateDetail(LoginRequiredMixin, generic.DetailView):
         asset_instance_list = AssetInstance.objects.filter(
             date=context['object'])
 
-        pk = []
-        names = []
-        values = []
+        rows = []
         for ai in asset_instance_list:
-            pk += [ai.pk]
-            names += [ai.asset.asset_name]
-            values += [ai.value]
-        context['asset_instance_details'] = zip(pk, names, values)
+            pk = ai.pk
+            name = ai.asset.asset_name
+            value = ai.value
+            rows += [(pk, name, value)]
+        context['asset_instance_details'] = sorted(rows, key=lambda x: x[1])
         return context
 
 
