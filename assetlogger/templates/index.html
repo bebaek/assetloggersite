@@ -18,6 +18,7 @@
           <tr>
             <td><a href="{% url 'asset-date-detail' pk %}">{{ date }}</a></td>
             <td>{{ value|intcomma }}</td>
+            <td><a href="{% url 'delete-asset-date' pk %}">Delete</a></td>
           </tr>
         {% endfor %}
       </tbody>

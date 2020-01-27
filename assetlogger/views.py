@@ -42,6 +42,11 @@ class AssetDelete(LoginRequiredMixin, generic.edit.DeleteView):
     success_url = reverse_lazy('assets')
 
 
+class AssetDateDelete(LoginRequiredMixin, generic.edit.DeleteView):
+    model = AssetDate
+    success_url = reverse_lazy('index')
+
+
 class AssetInstanceDelete(LoginRequiredMixin, generic.edit.DeleteView):
     model = AssetInstance
 
@@ -110,7 +115,8 @@ def create_asset_instance(request, pk_date):
                 value=form.cleaned_data['value'],
             )
             asset_instance.save()
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(
+                reverse('asset-date-detail', kwargs={'pk': pk_date}))
 
     # GET: create the default form
     else:
