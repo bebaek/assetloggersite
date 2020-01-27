@@ -6,10 +6,11 @@
   <h3>{{ object.date }}</h3>
 
   <table class="table table-sm table-striped">
-    {% for name, value in asset_instance_details %}
+    {% for pk, name, value in asset_instance_details %}
     <tr>
       <td>{{ name }}</td>
       <td>{{ value|intcomma }}</td>
+      <td><a href="{% url 'delete-asset-instance' pk %}">Delete</a></td>
     </tr>
     {% endfor %}
   </table>

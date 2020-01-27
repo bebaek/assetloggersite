@@ -42,6 +42,15 @@ class AssetDelete(LoginRequiredMixin, generic.edit.DeleteView):
     success_url = reverse_lazy('assets')
 
 
+class AssetInstanceDelete(LoginRequiredMixin, generic.edit.DeleteView):
+    model = AssetInstance
+
+    def get_success_url(self):
+        """Get back the parent page: date detail view."""
+        pk_date = self.object.date.pk
+        return reverse_lazy('asset-date-detail', kwargs={'pk': pk_date})
+
+
 class AssetDateDetail(LoginRequiredMixin, generic.DetailView):
     model = AssetDate
 
@@ -50,12 +59,14 @@ class AssetDateDetail(LoginRequiredMixin, generic.DetailView):
         asset_instance_list = AssetInstance.objects.filter(
             date=context['object'])
 
+        pk = []
         names = []
         values = []
         for ai in asset_instance_list:
+            pk += [ai.pk]
             names += [ai.asset.asset_name]
             values += [ai.value]
-        context['asset_instance_details'] = zip(names, values)
+        context['asset_instance_details'] = zip(pk, names, values)
         return context
 
 
