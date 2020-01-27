@@ -3,7 +3,7 @@
 {% block content %}
   <h3>Asset list</h3>
   {% if asset_list %}
-    <table class="table table-sm table-striped">
+    <table class="table table-sm table-striped table-hover">
       {% for asset in asset_list %}
         <tr>
           <td>{{ asset.asset_name }}</td>
