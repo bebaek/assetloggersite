@@ -2,6 +2,8 @@
 
 Log and track your financial assets. Web application based on Django.
 
+<img src="screenshot.png" alt="screenshot" width="600"/>
+
 ## Development
 
 ### Setting up environment
@@ -33,7 +35,8 @@ Start the app locally:
 
     python manage.py runserver
 
-Go to the local site <http://localhost:8000/assetlogger/> in a web browser.
+Go to the local site <http://localhost:8000> in a web browser.
+Login as a user, which can be created from the admin site explained below.
 
 ### Using the admin site
 

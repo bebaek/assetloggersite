@@ -1,29 +1,108 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
+from django.db.models import Sum
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views import generic
 
-from assetlogger.forms import CreateAssetInstanceForm
+from assetlogger.forms import (
+    CreateAssetForm, CreateAssetDateForm, CreateAssetInstanceForm
+)
 from assetlogger.models import Asset, AssetDate, AssetInstance
 
 
 @login_required
 def index(request):
     asset_dates = AssetDate.objects.all()
-    date_strs = [ad.date.isoformat() for ad in asset_dates]
 
-    # Get asset instances matching dates and get total values
-    assets = [
-        AssetInstance.objects.filter(date=ad) for ad in asset_dates]
-    values = map(lambda x: sum([a.value for a in x]), assets)
+    value_history = []
+    for ad in asset_dates:
+        # Get asset instances matching dates and get total values
+        value = AssetInstance.objects.filter(date=ad).aggregate(Sum('value'))
 
-    context = {'value_history': zip(date_strs, values)}
+        # Build a list of (pk, date, value) for context
+        value_history += [(ad.pk, ad.date.isoformat(), value['value__sum'])]
 
+    context = {'value_history': sorted(value_history, key=lambda x: x[1])}
     return render(request, 'index.html', context=context)
 
 
+class AssetListView(LoginRequiredMixin, generic.ListView):
+    model = Asset
+    ordering = ['asset_name']
+
+
+class AssetUpdate(LoginRequiredMixin, generic.edit.UpdateView):
+    model = Asset
+    fields = '__all__'
+
+
+class AssetDelete(LoginRequiredMixin, generic.edit.DeleteView):
+    model = Asset
+    success_url = reverse_lazy('assets')
+
+
+class AssetDateDelete(LoginRequiredMixin, generic.edit.DeleteView):
+    model = AssetDate
+    success_url = reverse_lazy('index')
+
+
+class AssetInstanceDelete(LoginRequiredMixin, generic.edit.DeleteView):
+    model = AssetInstance
+
+    def get_success_url(self):
+        """Get back the parent page: date detail view."""
+        pk_date = self.object.date.pk
+        return reverse_lazy('asset-date-detail', kwargs={'pk': pk_date})
+
+
+class AssetDateDetail(LoginRequiredMixin, generic.DetailView):
+    model = AssetDate
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        asset_instance_list = AssetInstance.objects.filter(
+            date=context['object'])
+
+        rows = []
+        for ai in asset_instance_list:
+            pk = ai.pk
+            name = ai.asset.asset_name
+            value = ai.value
+            rows += [(pk, name, value)]
+        context['asset_instance_details'] = sorted(rows, key=lambda x: x[1])
+        return context
+
+
 @login_required
-def create_asset_instance(request):
+def create_asset(request):
+    # POST: process the form data
+    if request.method == 'POST':
+        form = CreateAssetForm(request.POST)
+
+        if form.is_valid():
+            asset = Asset(
+                asset_name=form.cleaned_data['asset_name'],
+                ext_url=form.cleaned_data['ext_url'],
+            )
+            asset.save()
+            return HttpResponseRedirect(reverse('index'))
+
+    # GET: create the default form
+    else:
+        form = CreateAssetForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'assetlogger/create_asset.html', context)
+
+
+@login_required
+def create_asset_instance(request, pk_date):
+    asset_date = AssetDate(pk=pk_date)
+
     # POST: process the form data
     if request.method == 'POST':
         form = CreateAssetInstanceForm(request.POST)
@@ -31,21 +110,20 @@ def create_asset_instance(request):
         if form.is_valid():
             asset_instance = AssetInstance(
                 asset=form.cleaned_data['asset'],
-                date=form.cleaned_data['date'],
+                date=asset_date,
                 unit=form.cleaned_data['unit'],
                 value=form.cleaned_data['value'],
             )
             asset_instance.save()
-
-            # FIXME: Redirect to date view instead
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(
+                reverse('asset-date-detail', kwargs={'pk': pk_date}))
 
     # GET: create the default form
     else:
         form = CreateAssetInstanceForm(
             initial={
                 'asset': Asset.objects.get(pk=1),
-                'date': Asset.objects.get(pk=1),
+                'date': asset_date,
                 'unit': 'USD',
             })
 
@@ -53,3 +131,30 @@ def create_asset_instance(request):
         'form': form,
     }
     return render(request, 'assetlogger/create_asset_instance.html', context)
+
+
+@login_required
+def create_asset_date(request):
+    # POST: process the form data
+    if request.method == 'POST':
+        form = CreateAssetDateForm(request.POST)
+
+        if form.is_valid():
+            asset_date = AssetDate(
+                date=form.cleaned_data['date'],
+            )
+            asset_date.save()
+            return HttpResponseRedirect(reverse('index'))
+
+    # GET: create the default form
+    else:
+        default_date = AssetDate().date  # Initial date defined in model
+        form = CreateAssetDateForm(
+            initial={
+                'date': default_date,
+            })
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'assetlogger/create_asset_date.html', context)

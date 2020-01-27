@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% load humanize %}
+
+{% block content %}
+  <h3>{{ object.date }}</h3>
+
+  <table class="table table-sm table-striped table-hover">
+    {% for pk, name, value in asset_instance_details %}
+    <tr>
+      <td>{{ name }}</td>
+      <td>{{ value|intcomma }}</td>
+      <td><a href="{% url 'delete-asset-instance' pk %}">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p><a href="{% url 'create-asset-instance' object.pk %}">Create asset instance</a></p>
+{% endblock %}

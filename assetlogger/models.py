@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -6,6 +7,9 @@ class Asset(models.Model):
     """ Asset details. """
     asset_name = models.CharField(max_length=200)
     ext_url = models.URLField(max_length=200)
+
+    def get_absolute_url(self):
+        return reverse('assets')
 
     def __str__(self):
         return f'{self.asset_name}'

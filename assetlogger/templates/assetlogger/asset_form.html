@@ -3,9 +3,9 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <h3>Create asset instance</h3>
+  <h3>Edit asset</h3>
 
-  <form action="" method="post">
+  <form action="" method="POST">
     {% csrf_token %}
     {{ form|crispy }}
     <button type="submit" class="btn btn-success">Update</button>
