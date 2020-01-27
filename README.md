@@ -2,7 +2,7 @@
 
 Log and track your financial assets. Web application based on Django.
 
-<img src="screenshot.png" alt="screenshot" width="400"/>
+<img src="screenshot.png" alt="screenshot" width="600"/>
 
 ## Development
 
